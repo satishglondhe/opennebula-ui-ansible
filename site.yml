@@ -1,0 +1,16 @@
+---
+- name: Deploy open nebula
+  hosts: web_servers
+  remote_user: "{{remote_user}}"
+  gather_facts: yes
+
+  tasks:
+    - name: Debug message to test
+      ansible.builtin.debug:
+        msg: "Hello This is working"
+
+  roles:
+    - install_opennebula 
+    - configure_opennebula
+    - database
+    - frontend_installation

@@ -1,0 +1,10 @@
+# remote user name
+remote_user: "root"
+
+opennebula_version: 6.6
+ubuntu_version: 22.04
+
+username: oneadmin
+password: changeme123
+
+# 9869

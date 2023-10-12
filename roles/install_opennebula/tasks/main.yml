@@ -1,0 +1,49 @@
+---
+# tasks file for configure_repo
+- name: update cache
+  ansible.builtin.apt:
+    upgrade: dist
+    update_cache: yes
+  
+- name: install gnupg, wget, apt-transport-https
+  ansible.builtin.apt:
+    name: "{{item}}"
+    state: present
+  loop:
+    - gnupg
+    - wget
+    - apt-transport-https
+
+- name: Add OpenNebula repository key
+  ansible.builtin.apt_key:
+    url: https://downloads.opennebula.io/repo/repo2.key
+    state: present
+  register: opennebula_key_result
+
+- name: Check if OpenNebula key is installed
+  ansible.builtin.debug:
+    msg: "OpenNebula repository key added successfuly"
+  when: opennebula_key_result.changed
+
+- name: Add repository source list
+  ansible.builtin.template:
+    src: opennebula.list.j2
+    dest: /etc/apt/sources.list.d/opennebula.list
+    owner: "root"
+    group: "root"
+    mode: 0644
+
+- name: Update cache
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install softwares
+  ansible.builtin.apt:
+    name: "{{item}}"
+    state: present
+  loop: 
+    - opennebula
+    - opennebula-sunstone
+    - opennebula-tools
+    - opennebula-gate
+    - opennebula-common

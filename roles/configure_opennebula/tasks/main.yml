@@ -1,0 +1,17 @@
+---
+# tasks file for configure_opennebula
+- name: Set the username and password
+  ansible.builtin.template:
+    src: opennebula-credentials.j2
+    dest: /var/lib/one/.one/one_auth    
+    owner: oneadmin
+    group: oneadmin
+
+- name: Start opennebula services
+  ansible.builtin.service:
+    name: "{{item}}"
+    state: started
+    enabled: yes
+  loop:
+    - opennebula
+    - opennebula-sunstone
